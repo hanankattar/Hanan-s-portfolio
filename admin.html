@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Hanan Khoder Kattar</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav-row">
+    <span class="nav-id"><b>Hanan Khoder Kattar</b> · Admin</span>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom: 30px;" id="lock-screen">
+    <div class="wrap">
+      <p class="kicker">admin only</p>
+      <h1 class="display" style="max-width: 16ch;">Enter password</h1>
+      <p class="lede">This page is only for managing your own portfolio.</p>
+      <form id="lock-form" style="max-width: 360px;">
+        <div class="form-field">
+          <input type="password" id="lock-password" placeholder="Password" autocomplete="current-password" style="font-family: var(--sans); font-size: 14.5px; padding: 10px 12px; border: 1px solid var(--line); background: var(--card-bg); border-radius: 2px; width: 100%;">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Unlock</button>
+        </div>
+        <p class="status-msg" id="lock-status"></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="admin-content" style="display:none;">
+
+  <section class="hero" style="padding-bottom: 30px;">
+    <div class="wrap">
+      <p class="kicker">private — not linked from your public pages' nav</p>
+      <h1 class="display" style="max-width: 20ch;">Manage projects</h1>
+      <p class="lede">
+        Add, edit, or delete projects here. Changes save instantly to this browser.
+        Use <b>Export data.js</b> below whenever you want a permanent backup you can
+        commit to your repo. <a href="#" id="logout-link" style="margin-left: 8px;">Log out</a>
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Current projects</h2>
+        <span class="field-label" id="project-count"></span>
+      </div>
+      <div id="admin-list" class="admin-list"></div>
+
+      <div class="admin-toolbar">
+        <button class="btn-small" id="btn-export-datajs">Export data.js</button>
+        <button class="btn-small" id="btn-export-json">Export JSON backup</button>
+        <label class="btn-small" style="cursor:pointer;">
+          Import JSON backup
+          <input type="file" id="import-file" accept="application/json" style="display:none;">
+        </label>
+        <button class="btn-small danger" id="btn-reset">Reset to starting projects</button>
+      </div>
+      <p class="status-msg" id="toolbar-status"></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="section-head">
+        <h2 id="form-heading">Add a new project</h2>
+        <span class="field-label" id="form-mode-label">new</span>
+      </div>
+
+      <form class="admin-form" id="project-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-title">Title *</label>
+            <input type="text" id="f-title" required>
+          </div>
+          <div class="form-field">
+            <label for="f-status">Status</label>
+            <select id="f-status">
+              <option value="done">Complete</option>
+              <option value="in-progress">In progress</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="f-summary">Summary (shown on the projects list) *</label>
+          <textarea id="f-summary" required style="min-height:56px; font-family: var(--sans);"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="f-tagline">Tagline (shown at the top of the project's own page — optional, falls back to summary)</label>
+          <textarea id="f-tagline" style="min-height:56px; font-family: var(--sans);"></textarea>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-role">Role</label>
+            <input type="text" id="f-role" placeholder="e.g. Solo project, Team project — backend">
+          </div>
+          <div class="form-field">
+            <label for="f-year">Year</label>
+            <input type="text" id="f-year" placeholder="e.g. 2025">
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="f-tech">Tech stack (comma-separated)</label>
+          <input type="text" id="f-tech" placeholder="e.g. PHP, MySQL, JavaScript">
+        </div>
+
+        <div class="form-field">
+          <label for="f-description">Description — one paragraph per line</label>
+          <textarea id="f-description" style="min-height:120px;"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="f-highlights">Highlights — one per line</label>
+          <textarea id="f-highlights" style="min-height:90px;"></textarea>
+        </div>
+
+        <div class="form-field">
+          <label for="f-code">Code sample (optional — pasted as-is)</label>
+          <textarea id="f-code" style="min-height:100px;"></textarea>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-cover-upload">Cover photo — upload</label>
+            <input type="file" id="f-cover-upload" accept="image/*">
+            <div class="hint">Uploads are resized and compressed automatically before saving, so normal phone photos fit fine.</div>
+            <div class="cover-preview" id="cover-preview" style="display:none;"><img id="cover-preview-img"></div>
+            <p class="status-msg" id="cover-upload-status"></p>
+          </div>
+          <div class="form-field">
+            <label for="f-cover-path">— or paste an image link</label>
+            <input type="text" id="f-cover-path" placeholder="Google Drive share link, or any image URL">
+            <div class="hint">
+              For Google Drive: right-click the photo in Drive → Share → set
+              "Anyone with the link" → Copy link → paste it here as-is. It's
+              converted automatically. This avoids browser storage limits
+              entirely, so it's the better option for a lot of photos.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label for="f-gallery-upload">Extra screenshots — upload (you can select several)</label>
+          <input type="file" id="f-gallery-upload" accept="image/*" multiple>
+          <div id="gallery-preview" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;"></div>
+          <p class="status-msg" id="gallery-upload-status"></p>
+        </div>
+
+        <div class="form-field">
+          <label for="f-gallery-links">— or paste extra screenshot links, one per line</label>
+          <textarea id="f-gallery-links" placeholder="https://drive.google.com/file/d/.../view&#10;https://..." style="min-height:70px; font-family: var(--sans);"></textarea>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="f-repo">Repo link</label>
+            <input type="text" id="f-repo" placeholder="https://github.com/...">
+          </div>
+          <div class="form-field">
+            <label for="f-demo">Live demo link</label>
+            <input type="text" id="f-demo" placeholder="https://...">
+          </div>
+        </div>
+
+        <div class="form-field checkbox-row">
+          <input type="checkbox" id="f-pinned">
+          <label for="f-pinned">Feature this in its own "Senior project" section (use for one project at a time)</label>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn primary" id="btn-submit">Add project</button>
+          <button type="button" class="btn ghost" id="btn-cancel" style="display:none;">Cancel edit</button>
+        </div>
+        <p class="status-msg" id="form-status"></p>
+      </form>
+    </div>
+  </section>
+  </div>
+</main>
+
+<footer class="site">
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%;">
+    <span>© 2026 Hanan Khoder Kattar</span>
+    <span><a href="projects.html">back to projects</a></span>
+  </div>
+</footer>
+
+<script src="js/data.js"></script>
+<script src="js/store.js"></script>
+<script src="js/image-utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
